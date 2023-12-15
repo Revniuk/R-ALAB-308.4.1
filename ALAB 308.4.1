@@ -1,0 +1,71 @@
+const csvString = "ID,Name,Occupation,Age\n42,Bruce,Knight,41\n57,Bob,Fry Cook,19\n63,Blaine,Quiz Master,58\n98,Bill,Doctor’s Assistant,26";
+
+const rows = csvString.split("\n"); // Use '\n' instead of '\\n'
+
+// Get the number of columns from the first row
+const numColumns = rows[0].split(',').length;
+
+// Initialize the array
+let data = [];
+
+// Loop through each row
+for (const row of rows) {
+  // Split the row into cells 
+  const cells = row.split(',');
+
+  // Check if the number of cells in the row matches the number of columns
+  if (cells.length !== numColumns) {
+    console.log(`Row "${row}" does not have the correct number of columns.`);
+    continue;
+  }
+
+  // Add the row to the array
+  data.push(cells);
+}
+
+// Get the headings from the first row
+const headings = data[0].map(heading => heading.toLowerCase());
+
+// Initialize the array to store the objects
+let objects = [];
+
+// Loop through each row starting from the second row
+for (let i = 1; i < data.length; i++) {
+  // Initialize the object
+  let obj = {};
+
+  // Loop through each cell in the row
+  for (let j = 0; j < data[i].length; j++) {
+    // Add the cell to the object with the corresponding heading as the key
+    obj[headings[j]] = data[i][j];
+  }
+
+  // Add the object to the array
+  objects.push(obj);
+}
+
+// Insert an object at index 1
+objects.splice(1, 0, { id: "48", name: "Barry", occupation: "Runner", age: "25" });
+
+// Add an object to the end of the array
+objects.push({ id: "7", name: "Bilbo", occupation: "None", age: "111" });
+
+// Initialize the sum of ages
+let sum = 0;
+
+// Loop through each object in the array
+for (const obj of objects) {
+  // Add the age to the sum
+  sum += parseInt(obj.age); // Use parseInt instead of Number
+}
+
+// Calculate the average age
+let average = sum / objects.length;
+
+// Log the array of objects and the average age
+console.log(objects);
+console.log(`Average age: ${average}`);
+
+// Transform the final set of data back into CSV format
+const updatedCsvString = [rows[0], ...objects.map(obj => Object.values(obj).join(','))].join('\n');
+console.log(updatedCsvString);
